@@ -1,4 +1,5 @@
 var github = require('octonode');
+var colors = require('colors/safe');
 var GithubEventEmitter = require('./event-emitter');
 var _  = require('underscore');
 _.str = require('underscore.string');
@@ -19,17 +20,32 @@ githubEvents.on('event', function(event) {
                 });
 
                 cppFiles.forEach(function(file) {
-                    callback(file.patch);
+                    callback(commit, file.patch);
                 });
             });
         });
     };
 
+    var findDeletePointers = function(patch) {
+        return _.str.include(patch, "delete ");
+    };
+
     repo.languages(function(err, data, headers) {
         if("C++" in data) {
-           getCppPatches(function(patch) {
-                console.log(patch);
+           getCppPatches(function(commit, patch) {
+               if(findDeletePointers(patch)) {
+                    console.log(colors.red("delete used in commit " +
+                                commit.sha + " by user " + event.actor.login +
+                                " in repository " + event.repo.name));
+               } else {
+                    console.log(colors.gray("No delete used in commit " +
+                                commit.sha + " by user " + event.actor.login +
+                                " in repository " + event.repo.name));
+               }
            });
+        } else {
+            console.log(colors.gray("Skipping because " + event.repo.name +
+                                    " is not a C++ repo"));
         }
     });
 });
