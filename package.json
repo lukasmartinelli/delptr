@@ -25,6 +25,7 @@
   "homepage": "https://github.com/lukasmartinelli/delptr",
   "dependencies": {
     "octonode": "^0.6.11",
-    "underscore": "^1.7.0"
+    "underscore": "^1.7.0",
+    "underscore.string": "^2.4.0"
   }
 }
