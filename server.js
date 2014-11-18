@@ -7,7 +7,8 @@ var colors = require('colors/safe');
 var GithubEventEmitter = require('./event-emitter');
 var _  = require('underscore');
 _.str = require('underscore.string');
-
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 var client = github.client('9451220220bbc26c5ebe7972a3fe2b0988a14b7e');
 var githubEvents = new GithubEventEmitter(client);
 
@@ -24,7 +25,16 @@ rd.on('line', function(line) {
 });
 
 app.use(express.static(__dirname + '/public'));
-app.listen(process.env.PORT || 3000);
+//app.listen(process.env.PORT || 3000);
+
+io.on('connection', function(socket) {
+      console.log('a user connected');
+});
+
+
+http.listen(3000, function(){
+    console.log('listening on *:3000');
+});
 
 githubEvents.on('event', function(event) {
     if(event.type !== 'PushEvent') return;
@@ -65,10 +75,12 @@ githubEvents.on('event', function(event) {
             if(hasDeletePointers(patches)) {
                 line = commit.sha.slice(0, 10) + " in " + event.repo.name +
                        " has uses delete";
+                io.emit('log', line);
                 console.log(colors.red(line));
             } else {
                 line = commit.sha.slice(0, 10) + " in " + event.repo.name +
                        " has no delete";
+                io.emit('log', line);
                 console.log(colors.gray(line));
             }
         });
@@ -85,4 +97,4 @@ githubEvents.on('event', function(event) {
     }
 });
 
-//githubEvents.start();
+githubEvents.start();

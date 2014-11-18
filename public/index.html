@@ -9,16 +9,25 @@
         <link href='//fonts.googleapis.com/css?family=Abril+Fatface' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Gravitas+One' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=PT+Serif:700' rel='stylesheet' type='text/css'>
+        <script src="//cdn.jsdelivr.net/socket.io-client/1.2.0/socket.io.min.js"></script>
     </head>
     <body>
         <section class="message">
             <h2>Memory leaks terrorize Gotham</h2>
             <h1>@dbargn just used pointers in C++</h1>
+            <p id="live-log" class="log">asdfsdfasdfasdfsadfsdf</p>
         </section>
         <footer>
             <p>Copyright 2009 Your name</p>
         </footer>
-        <script src="//cdn.jsdelivr.net/socket.io-client/1.2.0/socket.io.min.js"></script>
+        <script>
+            var socket = io();
+
+            socket.on('log', function(msg){
+                console.log(msg);
+                document.getElementById("live-log").innerHTML = msg;
+            });
+        </script>
     </body>
 </html>
 

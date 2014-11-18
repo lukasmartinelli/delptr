@@ -1,8 +1,20 @@
+/*===LAYOUT===*/
+.message {
+    text-align: center;
+    position: fixed;
+    left: 0.5em;
+    bottom: 0;
+}
+
+.log {
+    background-color: #000;
+    color: #F8E0EC;
+}
+
 /*===TITLE===*/
 h1 {
     font: 700 4.5em/1.2em 'PT Serif';
     margin: 0;
-    color: #ffefc1;
     margin-bottom: 1em;
     text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
                  0px 8px 13px rgba(0,0,0,0.1),
@@ -10,7 +22,6 @@ h1 {
 }
 
 h2 {
-    color: #F8E0EC;
     font: 400 3em/1.2em 'PT Serif';
     margin: 0;
     margin-bottom: 0.5em;
@@ -19,15 +30,13 @@ h2 {
                  0px 18px 23px rgba(0,0,0,0.1);
 }
 
-.message {
-    text-align: center;
-    position: fixed;
-    left: 0.5em;
-    bottom: 0;
+/*===TITLE COLORS===*/
+html.batman.bad h1 {
+    color: #ffefc1;
 }
 
-
-html.batman.bad h1 {
+html.batman.bad h2 {
+    color: #F8E0EC;
 }
 
 /*===BACKGROUNDS===*/
