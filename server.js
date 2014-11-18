@@ -78,11 +78,19 @@ githubEvents.on('event', function(event) {
                 io.emit('log', line);
                 console.log(colors.red(line));
             } else {
-                var author = commit.author ? commit.author.login : commit.commit.commiter.name;
-                line = author + " commited " +
-                       commit.sha.slice(0, 7) + " to " + event.repo.name;
-                io.emit('log', line);
-                console.log(colors.gray(line));
+                var author = "";
+                if(commit.author) {
+                    author = commit.author.login; 
+                } else if(commit.commit.commiter) {
+                    author = commit.commit.commiter;
+                }
+                io.emit('log', {
+                    'author': author,
+                    'commit': commit.sha.slice(0, 7),
+                    'commit_url': commit.html_url,
+                    'repo': event.repo.name,
+                    'repo_url': 'https://github.com/' + event.repo.name, 
+                });
             }
         });
     };

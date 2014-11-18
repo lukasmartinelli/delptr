@@ -45,6 +45,10 @@ html.batman.bad h2 {
     color: #F8E0EC;
 }
 
+html.batman.bad a {
+    color: #a22a66;
+}
+
 html.batman.bad .log {
     background: url(http://api.thumbr.it/whitenoise-361x370.png?background=100729ff&noise=626262&density=44&opacity=27);
     color: #F8E0EC;

@@ -22,7 +22,11 @@
 
             socket.on('log', function(msg){
                 console.log(msg);
-                document.getElementById("live-log").innerHTML = msg;
+                var text = '<a href="' + msg.author_url + '">' + msg.author +
+                    '</a> commited <a href="' + msg.commit_url + '">' +
+                    msg.commit + '</a> to <a href="' + msg.repo_url +
+                    '">' + msg.repo + '</a>';
+                document.getElementById("live-log").innerHTML = text;
             });
         </script>
     </body>
