@@ -2,12 +2,8 @@
 <html class="batman bad">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Don't use delete</title>
-        <link href="main.css" rel="stylesheet" />
-        <link href='//fonts.googleapis.com/css?family=Oswald:400,700' rel='stylesheet' type='text/css'>
-        <link href='//fonts.googleapis.com/css?family=Ultra' rel='stylesheet' type='text/css'>
-        <link href='//fonts.googleapis.com/css?family=Abril+Fatface' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Gravitas+One' rel='stylesheet' type='text/css'>
+        <title>C++ software battle between the good and bad side</title>
+        <link href="main.css" rel="stylesheet" type="text/css">
         <link href='http://fonts.googleapis.com/css?family=PT+Serif:700' rel='stylesheet' type='text/css'>
         <script src="//cdn.jsdelivr.net/socket.io-client/1.2.0/socket.io.min.js"></script>
     </head>
@@ -15,10 +11,11 @@
         <section class="message">
             <h2>Memory leaks terrorize Gotham</h2>
             <h1>@dbargn just used pointers in C++</h1>
-            <p id="live-log" class="log">asdfsdfasdfasdfsadfsdf</p>
         </section>
         <footer>
-            <p>Copyright 2009 Your name</p>
+            <div class="log">
+                <p id="live-log">No live messages</p>
+            </div>
         </footer>
         <script>
             var socket = io();

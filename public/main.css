@@ -1,14 +1,20 @@
 /*===LAYOUT===*/
 .message {
-    text-align: center;
     position: fixed;
-    left: 0.5em;
-    bottom: 0;
+    bottom: 3em;
 }
 
 .log {
-    background-color: #000;
-    color: #F8E0EC;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    padding: 0.5em;
+    font-size: 1.6em;
+    line-height: 1.2em;
+}
+
+.log p {
+    margin: 0;
 }
 
 /*===TITLE===*/
@@ -36,6 +42,11 @@ html.batman.bad h1 {
 }
 
 html.batman.bad h2 {
+    color: #F8E0EC;
+}
+
+html.batman.bad .log {
+    background: url(http://api.thumbr.it/whitenoise-361x370.png?background=100729ff&noise=626262&density=44&opacity=27);
     color: #F8E0EC;
 }
 

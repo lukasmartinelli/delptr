@@ -73,13 +73,14 @@ githubEvents.on('event', function(event) {
     var processRepo = function() {
         getCppPatches(function(commit, patches) {
             if(hasDeletePointers(patches)) {
-                line = commit.sha.slice(0, 10) + " in " + event.repo.name +
+                line = commit.sha.slice(0, 7) + " in " + event.repo.name +
                        " has uses delete";
                 io.emit('log', line);
                 console.log(colors.red(line));
             } else {
-                line = commit.sha.slice(0, 10) + " in " + event.repo.name +
-                       " has no delete";
+                var author = commit.author ? commit.author.login : commit.commit.commiter.name;
+                line = author + " commited " +
+                       commit.sha.slice(0, 7) + " to " + event.repo.name;
                 io.emit('log', line);
                 console.log(colors.gray(line));
             }
