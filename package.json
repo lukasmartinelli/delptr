@@ -25,6 +25,7 @@
   "homepage": "https://github.com/lukasmartinelli/delptr",
   "dependencies": {
     "colors": "^1.0.3",
+    "express": "^4.10.2",
     "mongodb": "^1.4.20",
     "octonode": "^0.6.11",
     "underscore": "^1.7.0",

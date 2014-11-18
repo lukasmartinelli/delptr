@@ -27,17 +27,21 @@ GithubEventEmitter.prototype.stop = function() {
 
 GithubEventEmitter.prototype.makeRequest = function() {
     this.client.get('/events', {}, function(err, status, body, headers) {
-        var lowestTime = 0;
-        body.forEach(function(event){
-            var eventTime = Date.parse(event.created_at);
-            if (eventTime > this.lastEvent) {
-                this.emit('event', event);
-            }
-            if (lowestTime < eventTime) {
-                lowestTime = eventTime;
-            }
-        }.bind(this));
-        this.lastEvent = lowestTime;
+        if (!err && status == 200) {
+            var lowestTime = 0;
+            body.forEach(function(event){
+                var eventTime = Date.parse(event.created_at);
+                if (eventTime > this.lastEvent) {
+                    this.emit('event', event);
+                }
+                if (lowestTime < eventTime) {
+                    lowestTime = eventTime;
+                }
+            }.bind(this));
+            this.lastEvent = lowestTime;
+        } else {
+            console.log('Could not get events: ' + status + err);
+        }
     }.bind(this));
 }
 

@@ -1,0 +1,56 @@
+/*===TITLE===*/
+h1 {
+    font: 700 4.5em/1.2em 'PT Serif';
+    margin: 0;
+    color: #ffefc1;
+    margin-bottom: 1em;
+    text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
+                 0px 8px 13px rgba(0,0,0,0.1),
+                 0px 18px 23px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #F8E0EC;
+    font: 400 3em/1.2em 'PT Serif';
+    margin: 0;
+    margin-bottom: 0.5em;
+    text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
+                 0px 8px 13px rgba(0,0,0,0.1),
+                 0px 18px 23px rgba(0,0,0,0.1);
+}
+
+.message {
+    text-align: center;
+    position: fixed;
+    left: 0.5em;
+    bottom: 0;
+}
+
+
+html.batman.bad h1 {
+}
+
+/*===BACKGROUNDS===*/
+html {
+  background: no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+html.batman.good {
+    background-image: url(images/batman.jpg);
+}
+
+html.batman.bad {
+    background-image: url(images/joker.jpg);
+}
+
+html.lotr.good {
+    background-image: url(images/gandalf.jpg);
+}
+
+html.lotr.bad {
+    background-image: url(images/sauron.jpg);
+}

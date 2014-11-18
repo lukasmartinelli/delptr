@@ -1,5 +1,7 @@
 var github = require('octonode');
 var fs = require("fs");
+var express = require('express');
+var app = express();
 var readline = require('readline');
 var colors = require('colors/safe');
 var GithubEventEmitter = require('./event-emitter');
@@ -20,6 +22,9 @@ var cppRepos = {};
 rd.on('line', function(line) {
     cppRepos[line] = true;
 });
+
+app.use(express.static(__dirname + '/public'));
+app.listen(process.env.PORT || 3000);
 
 githubEvents.on('event', function(event) {
     if(event.type !== 'PushEvent') return;
@@ -80,4 +85,4 @@ githubEvents.on('event', function(event) {
     }
 });
 
-githubEvents.start();
+//githubEvents.start();
