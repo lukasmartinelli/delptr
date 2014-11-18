@@ -26,8 +26,7 @@ GithubEventEmitter.prototype.stop = function() {
 }
 
 GithubEventEmitter.prototype.makeRequest = function() {
-    params = { page: 1, per_page: 100, rand: Math.random()};
-    this.client.get('/events', params, function(err, status, body, headers) {
+    this.client.get('/events', {}, function(err, status, body, headers) {
         var lowestTime = 0;
         body.forEach(function(event){
             var eventTime = Date.parse(event.created_at);
