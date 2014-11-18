@@ -10,7 +10,7 @@
     <body>
         <section class="message">
             <h2>Memory leaks terrorize Gotham</h2>
-            <h1>@dbargn just used pointers in C++</h1>
+            <h1 id="delete-message">@dbargn just used pointers in C++</h1>
         </section>
         <footer>
             <div class="log">
@@ -20,8 +20,13 @@
         <script>
             var socket = io();
 
-            socket.on('log', function(msg){
+            socket.on('delete', function(msg){
                 console.log(msg);
+                var text = '<a href="' + msg.commit_url+ '">@' + msg.author +
+                           '</a> just used pointers in C++';
+                document.getElementById("live-log").innerHTML = text;
+            });
+            socket.on('log', function(msg){
                 var text = '<a href="' + msg.author_url + '">' + msg.author +
                     '</a> commited <a href="' + msg.commit_url + '">' +
                     msg.commit + '</a> to <a href="' + msg.repo_url +

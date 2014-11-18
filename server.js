@@ -65,18 +65,30 @@ githubEvents.on('event', function(event) {
     var hasDeletePointers = function(patches) {
         return _.chain(patches)
             .map(function(patch) {
+                console.log(_.str.include(patch, "delete "));
                 return _.str.include(patch, "delete ");
             })
-            .some(true).value();
+            .some().value();
     };
 
     var processRepo = function() {
         getCppPatches(function(commit, patches) {
+            console.log("hasDelete: " + hasDeletePointers(patches));
             if(hasDeletePointers(patches)) {
-                line = commit.sha.slice(0, 7) + " in " + event.repo.name +
-                       " has uses delete";
-                io.emit('log', line);
-                console.log(colors.red(line));
+                var author = "";
+                if(commit.author) {
+                    author = commit.author.login; 
+                } else if(commit.commit.commiter) {
+                    author = commit.commit.commiter;
+                }
+                io.emit('delete', {
+                    'author': author,
+                    'commit': commit.sha.slice(0, 7),
+                    'commit_url': commit.html_url,
+                    'repo': event.repo.name,
+                    'repo_url': 'https://github.com/' + event.repo.name, 
+                });
+                console.log(colors.red("DELETE FOUND IN " + commit.html_url));
             } else {
                 var author = "";
                 if(commit.author) {
