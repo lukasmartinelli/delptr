@@ -1,0 +1,102 @@
+/*===LAYOUT===*/
+
+html {
+  background: url(oilspill.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.message {
+    position: fixed;
+    bottom: 3em;
+}
+
+.log {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    padding: 0.5em;
+    font-size: 1.6em;
+    line-height: 1.2em;
+}
+
+.log p {
+    margin: 0;
+}
+
+/*===LAYOUT===*/
+header {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.main {
+    margin: 0 auto;
+    width: 35em;
+}
+/*===TITLE===*/
+h1 {
+    font: 700 4em/1.2em 'Anton';
+    color: #ffefc1;
+    margin-bottom: 0.2em;
+    text-align: center;
+    padding: 0.2em;
+    text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
+                 0px 8px 13px rgba(0,0,0,0.1),
+                 0px 18px 23px rgba(0,0,0,0.1);
+}
+
+a {
+    color: #ffefc1;
+}
+
+code {
+    font-size: 2em;
+}
+
+/*===BLAME===*/
+
+.blame {
+    padding: 0;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.24);
+    border-radius: 2px;
+}
+
+.avatar {
+    background-color: #ffefc1;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.24);
+    border-radius: 2px;
+}
+
+.avatar img {
+    max-height: 5em;
+    float: left;
+    margin-right: 1em;
+}
+
+.avatar .commit {
+    float: left;
+}
+h2 {
+    font-family: 'Droid Sans Mono', monospace;
+}
+.avatar a {
+    color: #5D3A00;
+}
+
+.avatar:before,
+.avatar:after {
+    content: " ";
+    display: table;
+}
+
+.avatar:after {
+    clear: both;
+}
+
+code {
+    font-family: 'Droid Sans Mono', monospace;
+}

@@ -1,45 +1,23 @@
 var github = require('octonode');
-var fs = require("fs");
 var express = require('express');
 var app = express();
-var readline = require('readline');
-var colors = require('colors/safe');
-var GithubEventEmitter = require('./event-emitter');
-var _  = require('underscore');
-_.str = require('underscore.string');
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var client = github.client('9451220220bbc26c5ebe7972a3fe2b0988a14b7e');
-var githubEvents = new GithubEventEmitter(client);
+var linter = require('./linter');
 
+const args = process.argv.slice(2);
+const accessToken = args[0];
+const port = args[1] || 3000;
 
-var rd = readline.createInterface({
-    input: fs.createReadStream('./cpp_repos.txt'),
-    output: process.stdout,
-    terminal: false
-});
-
-var cppRepos = {};
-rd.on('line', function(line) {
-    cppRepos[line] = true;
-});
+var githubClient = github.client(accessToken);
+var url = 'http://ghrr.lukasmartinelli.ch:80/events';
+var serverSocket = require('socket.io')(http);
+var clientSocket = require('socket.io-client')(url);
 
 app.use(express.static(__dirname + '/public'));
-//app.listen(process.env.PORT || 3000);
+http.listen(port);
 
-io.on('connection', function(socket) {
-      console.log('a user connected');
-});
-
-
-http.listen(3000, function(){
-    console.log('listening on *:3000');
-});
-
-githubEvents.on('event', function(event) {
-    if(event.type !== 'PushEvent') return;
-
-    var repo = client.repo(event.repo.name);
+clientSocket.on('pushevent', function(event) {
+    var repo = githubClient.repo(event.repo.name);
 
     var getCommits = function(callback) {
         event.payload.commits.forEach(function(commit) {
@@ -49,73 +27,11 @@ githubEvents.on('event', function(event) {
         });
     };
 
-    var getCppPatches = function(callback) {
-        getCommits(function(commit) {
-            var cppFiles = _.filter(commit.files, function(file) {
-                return _.str.endsWith(file.filename, ".cpp") ||
-                       _.str.endsWith(file.filename, ".h");
-            });
-            var patches = _.map(cppFiles, function(file) {
-                return file.patch;
-            });
-            callback(commit, patches);
-        });
-    };
-
-    var hasDeletePointers = function(patches) {
-        return _.chain(patches)
-            .map(function(patch) {
-                console.log(_.str.include(patch, "delete "));
-                return _.str.include(patch, "delete ");
-            })
-            .some().value();
-    };
-
-    var processRepo = function() {
-        getCppPatches(function(commit, patches) {
-            console.log("hasDelete: " + hasDeletePointers(patches));
-            if(hasDeletePointers(patches)) {
-                var author = "";
-                if(commit.author) {
-                    author = commit.author.login; 
-                } else if(commit.commit.commiter) {
-                    author = commit.commit.commiter;
-                }
-                io.emit('delete', {
-                    'author': author,
-                    'commit': commit.sha.slice(0, 7),
-                    'commit_url': commit.html_url,
-                    'repo': event.repo.name,
-                    'repo_url': 'https://github.com/' + event.repo.name, 
-                });
-                console.log(colors.red("DELETE FOUND IN " + commit.html_url));
-            } else {
-                var author = "";
-                if(commit.author) {
-                    author = commit.author.login; 
-                } else if(commit.commit.commiter) {
-                    author = commit.commit.commiter;
-                }
-                io.emit('log', {
-                    'author': author,
-                    'commit': commit.sha.slice(0, 7),
-                    'commit_url': commit.html_url,
-                    'repo': event.repo.name,
-                    'repo_url': 'https://github.com/' + event.repo.name, 
-                });
-            }
-        });
-    };
-
-    if(event.repo.name in cppRepos) {
-        processRepo();
-    } else {
-        repo.languages(function(err, data, headers) {
-            if("C++" in data) {
-                processRepo();
-            }
-        });
-    }
+    repo.languages(function(err, data, headers) {
+        if('C++' in data) {
+            linter.checkRepo(event, repo, function(check) {
+                console.log(check);
+            }); 
+        } 
+    });
 });
-
-githubEvents.start();

@@ -1,25 +1,46 @@
 <!DOCTYPE HTML>
-<html class="batman bad">
+<html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>C++ software battle between the good and bad side</title>
-        <link href="main.css" rel="stylesheet" type="text/css">
+        <title>Don't leak Memory! Use Smart Pointers in C++</title>
+        <link href="screen.css" rel="stylesheet" type="text/css">
         <link href='http://fonts.googleapis.com/css?family=PT+Serif:700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Anton' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/8.4.0/styles/monokai_sublime.min.css">
         <script src="//cdn.jsdelivr.net/socket.io-client/1.2.0/socket.io.min.js"></script>
+        <script src="//cdn.jsdelivr.net/highlight.js/8.4.0/highlight.min.js"></script>
     </head>
     <body>
-        <section class="message">
-            <h2>Memory leaks terrorize Gotham</h2>
-            <h1 id="delete-message">@dbargn just used pointers in C++</h1>
-        </section>
-        <footer>
-            <div class="log">
-                <p id="live-log">No live messages</p>
+        <header>
+            <h1>Don't leak Memory!<br />
+                Use <a href="http://en.cppreference.com/w/cpp/memory/unique_ptr">smart pointers!</a>
+            </h1>
+        </header>
+        <section class="main">
+            <div class="blame">
+                <div class="avatar">
+                    <img src="https://avatars3.githubusercontent.com/u/1288339?v=3&s=460" />
+                    <h2>
+                        <a href="#">lukasmartinelli<a/>
+                        managed his own memory in commit
+                        <a href="#">8042e74</a>
+                    </h2>
+                </div>
+                <div class="code">
+                    <pre>
+                        <code>
+    MyObject* ptr = new MyObject(); 
+    ptr->DoSomething();
+    delete ptr;
+                        </code>
+                    </pre>
+                </div>
             </div>
-        </footer>
+        </section>
         <script>
+            hljs.initHighlightingOnLoad();
             var socket = io();
-
             socket.on('delete', function(msg){
                 console.log(msg);
                 var text = '<a href="' + msg.commit_url+ '">@' + msg.author +
