@@ -1,5 +1,4 @@
-/*===LAYOUT===*/
-
+/*===BASE===*/
 html {
   background: url(oilspill.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
@@ -8,28 +7,17 @@ html {
   background-size: cover;
 }
 
-.message {
-    position: fixed;
-    bottom: 3em;
+a {
+    color: #ffefc1;
 }
 
-.log {
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    padding: 0.5em;
-    font-size: 1.6em;
-    line-height: 1.2em;
-}
-
-.log p {
-    margin: 0;
+code {
+    font-family: 'Droid Sans Mono', monospace;
+    font-size: 2em;
 }
 
 /*===LAYOUT===*/
 header {
-    position: fixed;
-    bottom: 0;
     width: 100%;
 }
 
@@ -37,10 +25,11 @@ header {
     margin: 0 auto;
     width: 35em;
 }
-/*===TITLE===*/
+/*===HEADERS===*/
 h1 {
-    font: 700 4em/1.2em 'Anton';
+    font: 700 8em/1.2em 'Anton';
     color: #ffefc1;
+    margin: 0;
     margin-bottom: 0.2em;
     text-align: center;
     padding: 0.2em;
@@ -49,16 +38,11 @@ h1 {
                  0px 18px 23px rgba(0,0,0,0.1);
 }
 
-a {
-    color: #ffefc1;
-}
-
-code {
-    font-size: 2em;
+h2 {
+    font-family: 'Droid Sans Mono', monospace;
 }
 
 /*===BLAME===*/
-
 .blame {
     padding: 0;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.24);
@@ -80,23 +64,16 @@ code {
 .avatar .commit {
     float: left;
 }
-h2 {
-    font-family: 'Droid Sans Mono', monospace;
-}
+
 .avatar a {
     color: #5D3A00;
 }
 
-.avatar:before,
-.avatar:after {
+.avatar:before, .avatar:after {
     content: " ";
     display: table;
 }
 
 .avatar:after {
     clear: both;
-}
-
-code {
-    font-family: 'Droid Sans Mono', monospace;
 }

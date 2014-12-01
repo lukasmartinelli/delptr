@@ -31,7 +31,7 @@ clientSocket.on('pushevent', function(event) {
         if('C++' in data) {
             linter.checkRepo(event, repo, function(check) {
                 console.log(check);
-            }); 
-        } 
+            });
+        }
     });
 });

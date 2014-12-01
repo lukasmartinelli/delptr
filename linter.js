@@ -14,6 +14,7 @@ var isCppFile = function(file) {
 };
 
 var hasUnmanagedMemory = function(patch) {
+    if(!patch) return true;
     var lines = patch.split('\n');
     return lines.filter(function(line) {
         return line.indexOf("delete ")> -1 ||
@@ -25,7 +26,7 @@ var checkFile = function(file) {
 
     return {
         filename: file.filename,
-        errors: hasUnmanagedMemory(file.patch) 
+        errors: hasUnmanagedMemory(file.patch)
     };
 };
 
