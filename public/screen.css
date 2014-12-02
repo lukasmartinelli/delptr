@@ -23,7 +23,8 @@ header {
 
 .main {
     margin: 0 auto;
-    width: 35em;
+    width: 70em;
+    max-width: 100%;
 }
 /*===HEADERS===*/
 h1 {
@@ -40,6 +41,7 @@ h1 {
 
 h2 {
     font-family: 'Droid Sans Mono', monospace;
+    font-size: 1.8em;
 }
 
 /*===BLAME===*/

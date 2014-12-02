@@ -8,8 +8,6 @@
         <link href='http://fonts.googleapis.com/css?family=Anton' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/8.4.0/styles/monokai_sublime.min.css">
-        <script src="//cdn.jsdelivr.net/socket.io-client/1.2.0/socket.io.min.js"></script>
-        <script src="//cdn.jsdelivr.net/highlight.js/8.4.0/highlight.min.js"></script>
     </head>
     <body>
         <header>
@@ -20,40 +18,59 @@
         <section class="main">
             <div class="blame">
                 <div class="avatar">
-                    <img src="https://avatars3.githubusercontent.com/u/1288339?v=3&s=460" />
+                    <img data-bind="attr: { src: avatarUrl }" />
                     <h2>
-                        <a href="#">lukasmartinelli<a/>
-                        managed his own memory in commit
-                        <a href="#">8042e74</a>
+                        <a data-bind="attr: { link: userUrl }">
+                            <span data-bind="text: username"></span>
+                        <a/>
+                        <span>managed his own memory in commit</span>
+                        <a data-bind="attr: { link: commitUrl }">
+                            <span data-bind="text: commitSha"></span>
+                        </a>
                     </h2>
                 </div>
                 <div class="code">
                     <pre>
-                        <code>
-    MyObject* ptr = new MyObject(); 
-    ptr->DoSomething();
-    delete ptr;
+                        <code id="code-fragment" data-bind="text: code">
                         </code>
                     </pre>
                 </div>
             </div>
         </section>
+        <script src="//cdn.jsdelivr.net/socket.io-client/1.2.0/socket.io.min.js"></script>
+        <script src="//cdn.jsdelivr.net/highlight.js/8.4.0/highlight.min.js"></script>
+        <script src="//cdn.jsdelivr.net/knockout/3.2.0/knockout.js"></script>
         <script>
-            hljs.initHighlightingOnLoad();
-            var socket = io();
-            socket.on('delete', function(msg){
-                console.log(msg);
-                var text = '<a href="' + msg.commit_url+ '">@' + msg.author +
-                           '</a> just used pointers in C++';
-                document.getElementById("live-log").innerHTML = text;
-            });
-            socket.on('log', function(msg){
-                var text = '<a href="' + msg.author_url + '">' + msg.author +
-                    '</a> commited <a href="' + msg.commit_url + '">' +
-                    msg.commit + '</a> to <a href="' + msg.repo_url +
-                    '">' + msg.repo + '</a>';
-                document.getElementById("live-log").innerHTML = text;
-            });
+            (function(){
+                hljs.initHighlightingOnLoad();
+
+                var model = {
+                    username: ko.observable(),
+                    userUrl: ko.observable(),
+                    avatarUrl: ko.observable(),
+                    commitSha: ko.observable(),
+                    commitUrl: ko.observable(),
+                    code: ko.observable(),
+                };
+
+                ko.applyBindings(model);
+
+                model.code('MyObject* ptr = new MyObject();\n' +
+                           'ptr->DoSomething();\n' +
+                           'delete ptr;');
+
+                io().on('error', function(msg) {
+                    console.log(msg.commit);
+
+                    model.username(msg.actor.login);
+                    model.userUrl('https://github.com/' + msg.actor.login);
+                    model.avatarUrl(msg.actor.avatar_url);
+                    model.commitSha(msg.commit.sha.slice(0,10));
+
+                    model.code(msg.code);
+                    hljs.highlightBlock(document.getElementById('code-fragment'));
+                });
+            })();
         </script>
     </body>
 </html>

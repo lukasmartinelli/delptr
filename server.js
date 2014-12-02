@@ -1,4 +1,3 @@
-var github = require('octonode');
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -9,7 +8,6 @@ const args = process.argv.slice(2);
 const accessToken = args[0];
 const port = args[1] || 3000;
 
-var githubClient = github.client(accessToken);
 var github = require('./github')(accessToken);
 var url = 'http://ghrr.lukasmartinelli.ch:80/events';
 var serverSocket = require('socket.io')(http);
@@ -47,9 +45,10 @@ clientSocket.on('pushevent', function(event) {
         github.getSpecificFile(event.repo, commit, filename, function(file) {
             var lines = file.split('\n');
             var from = to = error.linenumber;
-            if(error.linenumber > 3 && error.linenumber + 3 < lines.length) {
-                from = error.linenumber - 3 ;
-                to = error.linenumber + 3 ;
+            var codeMargin = 5;
+            if(error.linenumber > codeMargin && error.linenumber + codeMargin < lines.length) {
+                from = error.linenumber - codeMargin ;
+                to = error.linenumber + codeMargin;
                 callback(lines.slice(from, to).join('\n'));
             }
         });
@@ -61,6 +60,10 @@ clientSocket.on('pushevent', function(event) {
                          event.repo.name,
                          commit.sha.slice(0,7),
                          result.filename].join('\t'));
+            serverSocket.emit('ok', {
+                commit: commit,
+                filename: result.filename
+            });
         } else {
             result.errors.forEach(function(error) {
                 var errorLocation = result.filename + ':' + error.linenumber;
@@ -84,11 +87,14 @@ clientSocket.on('pushevent', function(event) {
         result.errors.forEach(function(error) {
             getErrorCodeFragment(commit, error, result.filename,
             function(fragment) {
-                /*
-                console.log('--------' + result.filename + '----------');
-                console.log(fragment);
-                console.log('-----------------------------------------');
-                */
+                serverSocket.emit('error', {
+                    actor: event.actor,
+                    repo: event.repo,
+                    commit: commit,
+                    error: error,
+                    filename: result.filename,
+                    code: fragment
+                });
             });
         });
     };

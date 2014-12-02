@@ -18,7 +18,7 @@ var hasUnmanagedMemory = function(lines) {
         })
         .map(function(line) {
             return {
-                linenumber: line.ln2 || line.ln1,
+                linenumber: line.ln || line.ln2,
                 content: line.content,
                 new: line.content.indexOf("new ") > -1,
                 delete: line.content.indexOf("delete ") > -1,
