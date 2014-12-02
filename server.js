@@ -43,6 +43,18 @@ clientSocket.on('pushevent', function(event) {
         });
     };
 
+    var getErrorCodeFragment = function(commit, error, filename, callback) {
+        github.getSpecificFile(event.repo, commit, filename, function(file) {
+            var lines = file.split('\n');
+            var from = to = error.linenumber;
+            if(error.linenumber > 3 && error.linenumber + 3 < lines.length) {
+                from = error.linenumber - 3 ;
+                to = error.linenumber + 3 ;
+                callback(lines.slice(from, to).join('\n'));
+            }
+        });
+    };
+
     var printLintResult = function(commit, result) {
         if(result.errors.length == 0) {
             console.log(['OK',
@@ -58,6 +70,7 @@ clientSocket.on('pushevent', function(event) {
                     return 'NONE';
                 };
 
+
                 console.log([errorType(),
                              event.repo.name,
                              //commit.author.email,
@@ -67,11 +80,25 @@ clientSocket.on('pushevent', function(event) {
         }
     };
 
+    var handleErrors = function(commit, result) {
+        result.errors.forEach(function(error) {
+            getErrorCodeFragment(commit, error, result.filename,
+            function(fragment) {
+                /*
+                console.log('--------' + result.filename + '----------');
+                console.log(fragment);
+                console.log('-----------------------------------------');
+                */
+            });
+        });
+    };
+
     github.getLanguages(event.repo, function(languages) {
         if('C++' in languages) {
             checkRepo(function(commit, lintResults) {
                 lintResults.forEach(function(result) {
                     printLintResult(commit, result);
+                    handleErrors(commit, result);
                 });
             });
         }

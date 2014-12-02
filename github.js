@@ -36,6 +36,14 @@ module.exports = function(accessToken) {
             request({ url: url}, function(error, response, body) {
                 callback(body);
             });
-        }
+        },
+        getSpecificFile: function(repo, commit, filename, callback) {
+            var url = 'https://raw.githubusercontent.com/' + repo.name +
+                      '/' + commit.sha + '/' + filename;
+            console.log(url);
+            request({ url: url}, function(error, response, body) {
+                callback(body);
+            });
+        },
     };
 };
