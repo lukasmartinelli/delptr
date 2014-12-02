@@ -16,8 +16,6 @@ var hasUnmanagedMemory = function(lines) {
         .filter(function(line) {
             return line.type == 'add' || line.type == 'normal';
         })
-        .filter(function(line) {
-        })
         .map(function(line) {
             return {
                 linenumber: line.ln2,

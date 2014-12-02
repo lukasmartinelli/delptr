@@ -15,7 +15,18 @@ module.exports = function(accessToken) {
                     console.error(error);
                     callback([]);
                 }
-                callback(JSON.parse(body));
+
+                if(response.statusCode == 403) {
+                    var unixTimestamp = response.headers['x-ratelimit-reset'];
+                    var resetDate = new Date(unixTimestamp * 1000);
+                    console.error('Ratelimit reached! Try again at ',
+                                   resetDate.toLocaleTimeString());
+                    callback([]);
+                }
+
+                if(response.statusCode == 200) {
+                    callback(JSON.parse(body));
+                }
             });
         },
         getPatch: function(repo, commit, callback) {
