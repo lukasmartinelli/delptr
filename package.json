@@ -24,10 +24,10 @@
   },
   "homepage": "https://github.com/lukasmartinelli/delptr",
   "dependencies": {
+    "diff-parser": "0.0.1",
     "express": "^4.10.2",
-    "octonode": "^0.6.11",
+    "request": "^2.49.0",
     "socket.io": "^1.2.1",
-    "socket.io-client": "^1.2.1",
-    "string": "^2.2.0"
+    "socket.io-client": "^1.2.1"
   }
 }

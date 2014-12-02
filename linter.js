@@ -1,41 +1,51 @@
-var str = require('string');
-
-var getCommits = function(event, repo, callback) {
-    event.payload.commits.forEach(function(commit) {
-        repo.commit(commit.sha, function(err, data, headers) {
-            callback(data);
+var makeHunkReadable = function(hunk) {
+    return hunk.split('\n')
+        .filter(function(line) {
+            return line.charAt(0) != '-';
+        })
+        .map(function(line) {
+            if(line.charAt(0) == '+') {
+                return ' ' + line.substr(1)
+            }
+            return line;
         });
-    });
+};
+
+var hasUnmanagedMemory = function(lines) {
+    return lines
+        .filter(function(line) {
+            return line.type == 'add' || line.type == 'normal';
+        })
+        .filter(function(line) {
+        })
+        .map(function(line) {
+            return {
+                linenumber: line.ln2,
+                content: line.content,
+                new: line.content.indexOf("new ") > -1,
+                delete: line.content.indexOf("delete ") > -1,
+            };
+        })
+        .filter(function(line) {
+            return line.new || line.delete;
+        });
 };
 
 var isCppFile = function(file) {
-    return str(file.filename).endsWith('.cpp') ||
-           str(file.filename).endsWith('.h');
-};
-
-var hasUnmanagedMemory = function(patch) {
-    if(!patch) return true;
-    var lines = patch.split('\n');
-    return lines.filter(function(line) {
-        return line.indexOf("delete ")> -1 ||
-               line.indexOf("new ")> -1;
-    });
+    return /^.*\.(cpp|hpp|h)$/i.test(file.to);
 };
 
 var checkFile = function(file) {
-
     return {
-        filename: file.filename,
-        errors: hasUnmanagedMemory(file.patch)
+        filename: file.to || file.from,
+        errors: hasUnmanagedMemory(file.lines)
     };
 };
 
 module.exports = {
-    checkRepo: function(event, repo, callback) {
-        getCommits(event, repo, function(commit) {
-            callback(commit.files.filter(isCppFile).map(function(file) {
-                return checkFile(file);
-            }));
-        });
+    check: function(files) {
+        return files
+            .filter(isCppFile)
+            .map(checkFile);
     }
 };
