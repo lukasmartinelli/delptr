@@ -60,11 +60,7 @@
 
                 ko.applyBindings(model);
 
-                model.code('MyObject* ptr = new MyObject();\n' +
-                           'ptr->DoSomething();\n' +
-                           'delete ptr;');
-
-                io().on('error', function(msg) {
+                io().on('linterror', function(msg) {
                     model.username(msg.actor.login);
                     model.userUrl('https://github.com/' + msg.actor.login);
                     model.commitUrl('https://github.com/' + msg.repo.name +

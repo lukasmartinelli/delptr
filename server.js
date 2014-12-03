@@ -23,6 +23,7 @@ var code = require('./code')(options.codeMargin);
 
 var serverSocket = require('socket.io')(http);
 var clientSocket = require('socket.io-client')(options.url);
+var lastError;
 
 var handlePushEvent = function(event) {
     var getPatches = function (callback) {
@@ -42,14 +43,15 @@ var handlePushEvent = function(event) {
 
     var handleError = function (commit, filename, error) {
         github.file(event.repo.name, commit.sha, filename, function(file) {
-            serverSocket.emit('error', {
+            lastError = {
                 actor: event.actor,
                 repo: event.repo,
                 commit: commit,
                 error: error,
                 filename: filename,
                 code: code.codeFragment(error.linenumber, file)
-            });
+            };
+            serverSocket.emit('linterror', lastError);
         });
     };
 
@@ -86,3 +88,8 @@ var handlePushEvent = function(event) {
 app.use(express.static(path.join(__dirname ,'/public')));
 http.listen(options.port);
 clientSocket.on('pushevent', handlePushEvent);
+serverSocket.on('connection', function(browserSocket) {
+    if(lastError) {
+        browserSocket.emit('linterror', lastError);
+    }
+});
