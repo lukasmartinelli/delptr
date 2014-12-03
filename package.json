@@ -24,18 +24,15 @@
   },
   "homepage": "https://github.com/lukasmartinelli/delptr",
   "dependencies": {
+    "colors": "^1.0.3",
     "diff-parser": "0.0.1",
     "express": "^4.10.2",
-    "fast-csv": "^0.5.4",
     "request": "^2.49.0",
     "socket.io": "^1.2.1",
     "socket.io-client": "^1.2.1"
   },
   "devDependencies": {
     "gulp": "^3.8.10",
-    "gulp-eslint": "^0.2.0",
-    "gulp-fixmyjs": "0.0.10",
-    "gulp-jshint": "^1.9.0",
-    "gulp-jslint": "^0.1.9"
+    "gulp-eslint": "^0.2.0"
   }
 }

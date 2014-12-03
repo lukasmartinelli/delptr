@@ -6,6 +6,7 @@ var app = express();
 var http = require('http').Server(app);
 var linter = require('./linter');
 var parse = require('./parse');
+var log = require('./log');
 
 var options = (function() {
     var args = process.argv.slice(2);
@@ -39,36 +40,34 @@ var handlePushEvent = function(event) {
         });
     };
 
-    var handleErrors = function (commit, result) {
-        result.errors.forEach(function (error) {
-            github.file(event.repo.name, commit.sha, result.filename, function(file) {
-                serverSocket.emit('error', {
-                    actor: event.actor,
-                    repo: event.repo,
-                    commit: commit,
-                    error: error,
-                    filename: result.filename,
-                    code: code.codeFragment(error.linenumber, file)
-                });
+    var handleError = function (commit, filename, error) {
+        github.file(event.repo.name, commit.sha, filename, function(file) {
+            serverSocket.emit('error', {
+                actor: event.actor,
+                repo: event.repo,
+                commit: commit,
+                error: error,
+                filename: filename,
+                code: code.codeFragment(error.linenumber, file)
             });
         });
     };
 
-    var logSkip = function (repoName, commitSha) {
-        console.log([
-            'SKIP',
-            repoName,
-            commitSha.slice(0, 7)
-        ].join('\t'));
-    };
-
     var handleCheck = function(commit, lintResults) {
         if (lintResults.length === 0) {
-            logSkip(event.repo.name, commit.sha);
+            log.skip(event.repo.name, commit.sha);
         }
-        lintResults.forEach(function (result) {
-            linter.log(event.repo.name, commit.sha, result);
-            handleErrors(commit, result);
+
+        lintResults.forEach(function (lintResult) {
+            if (lintResult.errors.length > 0) {
+                lintResult.errors.forEach(function(error) {
+                    handleError(commit, lintResult.filename, error);
+                    log.lintError(event.repo.name, commit.sha,
+                                     lintResult.filename, error);
+                });
+            } else {
+                log.success(event.repo.name, commit.sha, lintResult.filename);
+            }
         });
 
     };
@@ -77,7 +76,7 @@ var handlePushEvent = function(event) {
         if('C++' in languages) {
             checkRepo(handleCheck);
         } else {
-            console.log(['IGNORE', event.repo.name].join('\t'));
+            log.ignore(event.repo.name);
         }
     }, function() {
         checkRepo(handleCheck);
