@@ -72,14 +72,14 @@ var handlePushEvent = function(event) {
         });
 
     };
-    
+
     github.languages(event.repo, function(languages) {
         if('C++' in languages) {
             checkRepo(handleCheck);
         } else {
             console.log(['IGNORE', event.repo.name].join('\t'));
         }
-    }, function(resetDate) {
+    }, function() {
         checkRepo(handleCheck);
     });
 };

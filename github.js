@@ -2,10 +2,10 @@
 var request = require('request');
 
 module.exports = function (accessToken) {
-    var headers = {
-        'User-Agent': 'delptr',
-        'Authorization': 'token ' + accessToken
-    };
+    var headers = { 'User-Agent': 'delptr' };
+    if(accessToken) {
+        headers.Authorization = 'token ' + accessToken;
+    }
 
     return {
         languages: function (repo, callback, rateLimitReached) {
@@ -15,20 +15,17 @@ module.exports = function (accessToken) {
             };
 
             request(options, function (error, response, body) {
-                var results = [],
-                    unixTimestamp = response.headers['x-ratelimit-reset'],
+                var unixTimestamp = response.headers['x-ratelimit-reset'],
                     resetDate = new Date(unixTimestamp * 1000);
                 if (error) {
                     console.error(error);
-                }
-                if (response.statusCode === 403) {
-                    console.error('Ratelimit reached! Try again at ', resetDate.toLocaleTimeString());
+                } else if (response.statusCode === 403) {
                     rateLimitReached(resetDate);
+                } else if (response.statusCode === 200) {
+                    callback(JSON.parse(body));
+                } else {
+                    console.error(body);
                 }
-                if (response.statusCode === 200) {
-                    results = JSON.parse(body);
-                }
-                callback(results);
             });
         },
         patch: function (repo, commit, callback) {
