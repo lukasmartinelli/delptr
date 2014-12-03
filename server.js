@@ -28,7 +28,7 @@ clientSocket.on('pushevent', function(event) {
 
     var getPatches = function(callback) {
         event.payload.commits.forEach(function(commit) {
-            github.getPatch(event.repo, commit, function(patch) {
+            github.patch(event.repo, commit, function(patch) {
                 callback(commit, parsePatchFile(patch));
             });
         });
@@ -42,9 +42,10 @@ clientSocket.on('pushevent', function(event) {
     };
 
     var getErrorCodeFragment = function(commit, error, filename, callback) {
-        github.getSpecificFile(event.repo, commit, filename, function(file) {
+        github.file(event.repo.name, commit.sha, filename, function(file) {
             var lines = file.split('\n');
-            var from = to = error.linenumber;
+            var from, to;
+            from = to = error.linenumber;
             var codeMargin = 7;
             if(error.linenumber > codeMargin && error.linenumber + codeMargin < lines.length) {
                 from = error.linenumber - codeMargin ;
@@ -55,7 +56,7 @@ clientSocket.on('pushevent', function(event) {
     };
 
     var printLintResult = function(commit, result) {
-        if(result.errors.length == 0) {
+        if(result.errors.length === 0) {
             console.log(['OK',
                          event.repo.name,
                          commit.sha.slice(0,7),
@@ -100,7 +101,7 @@ clientSocket.on('pushevent', function(event) {
     };
 
     checkRepo(function(commit, lintResults) {
-        if(lintResults.length == 0) {
+        if(lintResults.length === 0) {
             console.log(['SKIP',
                          event.repo.name,
                          commit.sha.slice(0,7)].join('\t'));

@@ -1,19 +1,22 @@
 var request = require('request');
 
 module.exports = function(accessToken) {
+    var headers = {
+        'User-Agent': 'delptr', 
+        'Authorization': 'token ' + accessToken,
+    };
+
     return {
-        getLanguages: function(repo, callback) {
+        languages: function(repo, callback) {
             var options = {
                 url: repo.url + '/languages',
-                headers: {
-                    'User-Agent': 'delptr',
-                    'Authorization': 'token ' + accessToken,
-                }
+                headers: headers
             };
             request(options, function(error, response, body) {
+                var results = [];
+
                 if(error) {
                     console.error(error);
-                    callback([]);
                 }
 
                 if(response.statusCode == 403) {
@@ -21,27 +24,35 @@ module.exports = function(accessToken) {
                     var resetDate = new Date(unixTimestamp * 1000);
                     console.error('Ratelimit reached! Try again at ',
                                    resetDate.toLocaleTimeString());
-                    callback([]);
                 }
 
                 if(response.statusCode == 200) {
-                    callback(JSON.parse(body));
+                    results = JSON.parse(body);
                 }
+                callback(results);
             });
         },
-        getPatch: function(repo, commit, callback) {
+        patch: function(repo, commit, callback) {
             var url = 'https://github.com/' + repo.name +
                       '/commit/' + commit.sha + '.patch';
 
             request({ url: url}, function(error, response, body) {
-                callback(body);
+                if(response.statusCode == 404) {
+                    console.error('Patch at ' + url + ' not found');
+                } else {
+                    callback(body);
+                }
             });
         },
-        getSpecificFile: function(repo, commit, filename, callback) {
-            var url = 'https://raw.githubusercontent.com/' + repo.name +
-                      '/' + commit.sha + '/' + filename;
+        file: function(repoName, commitSha, filename, callback) {
+            var url = 'https://raw.githubusercontent.com/' + repoName +
+                      '/' + commitSha + '/' + filename;
             request({ url: url}, function(error, response, body) {
-                callback(body);
+                if(response.statusCode == 404) {
+                    console.error('File at ' + url + ' not found');
+                } else {
+                    callback(body);
+                }
             });
         },
     };

@@ -5,7 +5,7 @@ var makeHunkReadable = function(hunk) {
         })
         .map(function(line) {
             if(line.charAt(0) == '+') {
-                return ' ' + line.substr(1)
+                return ' ' + line.substr(1);
             }
             return line;
         });
