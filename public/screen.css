@@ -44,6 +44,11 @@ h2 {
     font-size: 1.8em;
 }
 
+h3 {
+    font-family: 'Droid Sans Mono', monospace;
+    font-size: 1.2em;
+}
+
 /*===BLAME===*/
 .blame {
     padding: 0;
@@ -58,7 +63,7 @@ h2 {
 }
 
 .avatar img {
-    max-height: 7em;
+    max-height: 8em;
     float: left;
     margin-right: 1em;
 }

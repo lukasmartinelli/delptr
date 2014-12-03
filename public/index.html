@@ -27,7 +27,11 @@
                         <a data-bind="attr: { href: commitUrl }">
                             <span data-bind="text: commitSha"></span>
                         </a>
+                        <span></span>
                     </h2>
+                    <h3>
+                        <span data-bind="text: filename() + ':' + linenumber()"></span>
+                    </h3>
                 </div>
                 <div class="code">
                     <pre>
@@ -51,6 +55,8 @@
                     commitSha: ko.observable(),
                     commitUrl: ko.observable(),
                     code: ko.observable(),
+                    filename: ko.observable(),
+                    linenumber: ko.observable(),
                 };
 
                 ko.applyBindings(model);
@@ -67,6 +73,8 @@
                     model.commitUrl('https://github.com/' + msg.repo.name +
                                     '/commit/' + msg.commit.sha);
                     model.avatarUrl(msg.actor.avatar_url);
+                    model.filename(msg.filename);
+                    model.linenumber(msg.error.linenumber);
                     model.commitSha(msg.commit.sha.slice(0,10));
 
                     model.code(msg.code);
