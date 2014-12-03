@@ -49,6 +49,18 @@ h3 {
     font-size: 1.2em;
 }
 
+@media(max-width: 80em) {
+    h1 { font-size: 6em; }
+    h2 { font-size: 1.4em; }
+    h3 { display: block; }
+    code { font-size: 1.4em; }
+}
+
+@media(max-width: 50em) {
+    h1 { font-size: 4em; }
+    h3 { display: none; }
+}
+
 /*===BLAME===*/
 .blame {
     padding: 0;
