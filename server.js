@@ -45,7 +45,7 @@ clientSocket.on('pushevent', function(event) {
         github.getSpecificFile(event.repo, commit, filename, function(file) {
             var lines = file.split('\n');
             var from = to = error.linenumber;
-            var codeMargin = 5;
+            var codeMargin = 7;
             if(error.linenumber > codeMargin && error.linenumber + codeMargin < lines.length) {
                 from = error.linenumber - codeMargin ;
                 to = error.linenumber + codeMargin;

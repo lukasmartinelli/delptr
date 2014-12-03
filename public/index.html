@@ -20,11 +20,11 @@
                 <div class="avatar">
                     <img data-bind="attr: { src: avatarUrl }" />
                     <h2>
-                        <a data-bind="attr: { link: userUrl }">
+                        <a data-bind="attr: { href: userUrl }">
                             <span data-bind="text: username"></span>
                         <a/>
                         <span>managed his own memory in commit</span>
-                        <a data-bind="attr: { link: commitUrl }">
+                        <a data-bind="attr: { href: commitUrl }">
                             <span data-bind="text: commitSha"></span>
                         </a>
                     </h2>
@@ -64,6 +64,8 @@
 
                     model.username(msg.actor.login);
                     model.userUrl('https://github.com/' + msg.actor.login);
+                    model.commitUrl('https://github.com/' + msg.repo.name +
+                                    '/commit/' + msg.commit.sha);
                     model.avatarUrl(msg.actor.avatar_url);
                     model.commitSha(msg.commit.sha.slice(0,10));
 
