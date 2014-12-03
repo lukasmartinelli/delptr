@@ -72,8 +72,16 @@ var handlePushEvent = function(event) {
         });
 
     };
-
-    checkRepo(handleCheck);
+    
+    github.languages(event.repo, function(languages) {
+        if('C++' in languages) {
+            checkRepo(handleCheck);
+        } else {
+            console.log(['IGNORE', event.repo.name].join('\t'));
+        }
+    }, function(resetDate) {
+        checkRepo(handleCheck);
+    });
 };
 
 app.use(express.static(path.join(__dirname ,'/public')));

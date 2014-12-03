@@ -8,7 +8,7 @@ module.exports = function (accessToken) {
     };
 
     return {
-        languages: function (repo, callback) {
+        languages: function (repo, callback, rateLimitReached) {
             var options = {
                 url: repo.url + '/languages',
                 headers: headers
@@ -23,6 +23,7 @@ module.exports = function (accessToken) {
                 }
                 if (response.statusCode === 403) {
                     console.error('Ratelimit reached! Try again at ', resetDate.toLocaleTimeString());
+                    rateLimitReached(resetDate);
                 }
                 if (response.statusCode === 200) {
                     results = JSON.parse(body);
