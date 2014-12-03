@@ -1,14 +1,16 @@
+'use strict';
 var gulp = require('gulp');
-var jshint = require('gulp-jshint');
+var eslint = require('gulp-eslint');
 
-gulp.task('lint', function() {
-    return gulp.src('*.js')
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'));
+gulp.task('lint', function () {
+    return gulp.src(['*.js'])
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failOnError());
 });
 
-gulp.task('watch', function() {
-    gulp.watch('**/*.js', ['lint']);
+gulp.task('watch', function () {
+    gulp.watch('*.js', ['lint']);
 });
 
 gulp.task('default', ['lint']);

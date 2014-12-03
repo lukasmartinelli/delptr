@@ -1,113 +1,76 @@
+/*eslint new-cap:0 */
+'use strict';
+var path = require('path');
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var linter = require('./linter');
-var parse = require('parse-diff');
+var parse = require('./parse');
 
-const args = process.argv.slice(2);
-const accessToken = args[0];
-const port = args[1] || 3000;
-
-var github = require('./github')(accessToken);
-var url = 'http://ghrr.lukasmartinelli.ch:80/events';
-var serverSocket = require('socket.io')(http);
-var clientSocket = require('socket.io-client')(url);
-
-app.use(express.static(__dirname + '/public'));
-http.listen(port);
-
-
-clientSocket.on('pushevent', function(event) {
-    var parsePatchFile = function(patch) {
-        var parts= patch.split(/(diff --git .*)/);
-        return {
-            header: parts[0],
-            body: parse(parts.slice(1).join(''))
-        };
+var options = (function() {
+    var args = process.argv.slice(2);
+    return {
+        accessToken: args[0],
+        port: args[1] || 3000,
+        codeMargin: 7,
+        url: 'http://ghrr.lukasmartinelli.ch:80/events'
     };
+})();
 
-    var getPatches = function(callback) {
-        event.payload.commits.forEach(function(commit) {
-            github.patch(event.repo, commit, function(patch) {
-                callback(commit, parsePatchFile(patch));
+var github = require('./github')(options.accessToken);
+var code = require('./code')(options.codeMargin);
+
+var serverSocket = require('socket.io')(http);
+var clientSocket = require('socket.io-client')(options.url);
+
+app.use(express.static(path.join(__dirname ,'/public')));
+http.listen(options.port);
+
+clientSocket.on('pushevent', function (event) {
+    var getPatches = function (callback) {
+        event.payload.commits.forEach(function (commit) {
+            github.patch(event.repo, commit, function (patch) {
+                callback(commit, parse(patch));
             });
         });
     };
 
-    var checkRepo = function(callback) {
-        getPatches(function(commit, patch) {
+    var checkRepo = function (callback) {
+        getPatches(function (commit, patch) {
             var lintResults = linter.check(patch.body);
             callback(commit, lintResults);
         });
     };
 
-    var getErrorCodeFragment = function(commit, error, filename, callback) {
-        github.file(event.repo.name, commit.sha, filename, function(file) {
-            var lines = file.split('\n');
-            var from, to;
-            from = to = error.linenumber;
-            var codeMargin = 7;
-            if(error.linenumber > codeMargin && error.linenumber + codeMargin < lines.length) {
-                from = error.linenumber - codeMargin ;
-                to = error.linenumber + codeMargin;
-                callback(lines.slice(from, to).join('\n'));
-            }
-        });
-    };
-
-    var printLintResult = function(commit, result) {
-        if(result.errors.length === 0) {
-            console.log(['OK',
-                         event.repo.name,
-                         commit.sha.slice(0,7),
-                         result.filename].join('\t'));
-            serverSocket.emit('ok', {
-                commit: commit,
-                filename: result.filename
-            });
-        } else {
-            result.errors.forEach(function(error) {
-                var errorLocation = result.filename + ':' + error.linenumber;
-                var errorType = function() {
-                    if(error.new) return 'NEW';
-                    if(error.delete) return 'DELETE';
-                    return 'NONE';
-                };
-
-
-                console.log([errorType(),
-                             event.repo.name,
-                             //commit.author.email,
-                             commit.sha.slice(0,7),
-                             errorLocation].join('\t'));
-            });
-        }
-    };
-
-    var handleErrors = function(commit, result) {
-        result.errors.forEach(function(error) {
-            getErrorCodeFragment(commit, error, result.filename,
-            function(fragment) {
+    var handleErrors = function (commit, result) {
+        result.errors.forEach(function (error) {
+            github.file(event.repo.name, commit.sha, result.filename, function(file) {
                 serverSocket.emit('error', {
                     actor: event.actor,
                     repo: event.repo,
                     commit: commit,
                     error: error,
                     filename: result.filename,
-                    code: fragment
+                    code: code.codeFragment(error.linenumber, file)
                 });
             });
         });
     };
 
-    checkRepo(function(commit, lintResults) {
-        if(lintResults.length === 0) {
-            console.log(['SKIP',
-                         event.repo.name,
-                         commit.sha.slice(0,7)].join('\t'));
+    var logSkip = function (lintResults, repoName, commitSha) {
+        if (lintResults.length === 0) {
+            console.log([
+                'SKIP',
+                event.repo.name,
+                commitSha.slice(0, 7)
+            ].join('\t'));
         }
-        lintResults.forEach(function(result) {
-            printLintResult(commit, result);
+    };
+
+    checkRepo(function (commit, lintResults) {
+        logSkip(lintResults, event.repo.name, commit.sha);
+        lintResults.forEach(function (result) {
+            linter.log(event.repo.name, commit.sha, result);
             handleErrors(commit, result);
         });
     });
