@@ -1,10 +1,10 @@
-# delptr [![Build Status](https://travis-ci.org/lukasmartinelli/delptr.svg)](https://travis-ci.org/lukasmartinelli/delptr) ![Dependencies](https://david-dm.org/lukasmartinelli/delptr.svg)
-Informs the world about people who still use naked pointers in C++.
+# delptr [![Build Status](https://travis-ci.org/lukasmartinelli/delptr.svg)](https://travis-ci.org/lukasmartinelli/delptr) ![Dependencies](https://david-dm.org/lukasmartinelli/delptr.svg) [![Code Climate](https://codeclimate.com/github/lukasmartinelli/delptr/badges/gpa.svg)](https://codeclimate.com/github/lukasmartinelli/delptr)
+
+Realtime linting of C++ projects on Github.
 
 ## Install
 
-You need NodeJS installed.
-Clone repos and install dependencies:
+Clone the repository and install the dependencies with Node.
 
 ```
 npm install
@@ -12,8 +12,10 @@ npm install
 
 ## Run
 
-Run program:
+Run the server with an optional Github Access Token.
+Please be aware that this will download alot of data.
 
 ```
-node server.js
+export GITHUB_ACCESS_TOKEN=asb1234gwa...
+node server.js $GITHUB_ACCESS_TOKEN
 ```
