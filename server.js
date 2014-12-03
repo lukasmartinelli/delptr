@@ -99,14 +99,15 @@ clientSocket.on('pushevent', function(event) {
         });
     };
 
-    github.getLanguages(event.repo, function(languages) {
-        if('C++' in languages) {
-            checkRepo(function(commit, lintResults) {
-                lintResults.forEach(function(result) {
-                    printLintResult(commit, result);
-                    handleErrors(commit, result);
-                });
-            });
+    checkRepo(function(commit, lintResults) {
+        if(lintResults.length == 0) {
+            console.log(['SKIP',
+                         event.repo.name,
+                         commit.sha.slice(0,7)].join('\t'));
         }
+        lintResults.forEach(function(result) {
+            printLintResult(commit, result);
+            handleErrors(commit, result);
+        });
     });
 });
