@@ -13,22 +13,15 @@ var options = (function() {
         accessToken: args[0],
         port: args[1] || 3000,
         codeMargin: 7,
-        url: 'http://ghrr.lukasmartinelli.ch:80/events',
-        repoLanguagesPath: 'repos_by_language.csv'
+        url: 'http://ghrr.lukasmartinelli.ch:80/events'
     };
 })();
 
-var parseRepos = require('./parse-repo-languages')(options.repoLanguagesPath);
 var github = require('./github')(options.accessToken);
 var code = require('./code')(options.codeMargin);
 
 var serverSocket = require('socket.io')(http);
 var clientSocket = require('socket.io-client')(options.url);
-
-var repos = {};
-parseRepos(function(results) {
-    repos = results;
-});
 
 var handlePushEvent = function(event) {
     var getPatches = function (callback) {
@@ -61,30 +54,28 @@ var handlePushEvent = function(event) {
         });
     };
 
-    var logSkip = function (repoName, commitSha, info) {
+    var logSkip = function (repoName, commitSha) {
         console.log([
-            'SKIP', 
+            'SKIP',
             repoName,
             commitSha.slice(0, 7)
         ].join('\t'));
     };
 
-    if(event.repo.name in repos && repos[event.repo.name] !== 'C++') {
-        console.log(['IGNORE', event.repo.name].join('\t')); 
-    } else {
-        checkRepo(function (commit, lintResults) {
-            if (lintResults.length === 0) {
-                logSkip(event.repo.name, commit.sha);
-            }
-            lintResults.forEach(function (result) {
-                linter.log(event.repo.name, commit.sha, result);
-                handleErrors(commit, result);
-            });
+    var handleCheck = function(commit, lintResults) {
+        if (lintResults.length === 0) {
+            logSkip(event.repo.name, commit.sha);
+        }
+        lintResults.forEach(function (result) {
+            linter.log(event.repo.name, commit.sha, result);
+            handleErrors(commit, result);
         });
-    }
+
+    };
+
+    checkRepo(handleCheck);
 };
 
 app.use(express.static(path.join(__dirname ,'/public')));
 http.listen(options.port);
-
 clientSocket.on('pushevent', handlePushEvent);

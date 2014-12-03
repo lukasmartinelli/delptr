@@ -66,8 +66,6 @@
                            'delete ptr;');
 
                 io().on('error', function(msg) {
-                    console.log(msg.code);
-
                     model.username(msg.actor.login);
                     model.userUrl('https://github.com/' + msg.actor.login);
                     model.commitUrl('https://github.com/' + msg.repo.name +
