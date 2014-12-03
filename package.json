@@ -26,6 +26,7 @@
   "dependencies": {
     "diff-parser": "0.0.1",
     "express": "^4.10.2",
+    "fast-csv": "^0.5.4",
     "request": "^2.49.0",
     "socket.io": "^1.2.1",
     "socket.io-client": "^1.2.1"
