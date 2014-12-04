@@ -27,6 +27,6 @@ var checkFile = function (file) {
 
 module.exports = {
     check: function (files) {
-        return files .filter(isCppFile).map(checkFile);
+        return files.filter(isCppFile).map(checkFile);
     }
 };
