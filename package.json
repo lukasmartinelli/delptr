@@ -33,6 +33,8 @@
   },
   "devDependencies": {
     "gulp": "^3.8.10",
-    "gulp-eslint": "^0.2.0"
+    "gulp-eslint": "^0.2.0",
+    "gulp-mocha": "^2.0.0",
+    "should": "^4.3.0"
   }
 }
