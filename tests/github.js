@@ -1,6 +1,6 @@
 'use strict';
 var should = require('should');
-var proxyquire =  require('proxyquire');
+var proxyquire = require('proxyquire');
 
 describe('languages', function() {
     var requestStub = function(options, callback) {
