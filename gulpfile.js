@@ -2,10 +2,17 @@
 var gulp = require('gulp');
 var eslint = require('gulp-eslint');
 var mocha = require('gulp-mocha');
+var istanbul = require('gulp-istanbul');
 
 gulp.task('test', function () {
-    return gulp.src('tests/*.js', {read: false})
-        .pipe(mocha());
+    return gulp.src('*.js')
+        .pipe(istanbul())
+        .pipe(istanbul.hookRequire())
+        .on('finish', function () {
+             gulp.src(['tests/*.js'])
+                .pipe(mocha())
+                .pipe(istanbul.writeReports());
+        });
 });
 
 gulp.task('lint', function () {
