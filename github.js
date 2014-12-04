@@ -15,8 +15,9 @@ module.exports = function (accessToken) {
             };
 
             request(options, function (error, response, body) {
-                var unixTimestamp = response.headers['x-ratelimit-reset'],
-                    resetDate = new Date(unixTimestamp * 1000);
+                var unixTimestamp = response.headers['x-ratelimit-reset'];
+                var resetDate = new Date(unixTimestamp * 1000);
+
                 if (error) {
                     console.error(error);
                 } else if (response.statusCode === 403) {
