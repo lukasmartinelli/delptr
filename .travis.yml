@@ -6,3 +6,5 @@ before_install:
   - npm install -g gulp
 script:
   - gulp
+after_script:
+  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
