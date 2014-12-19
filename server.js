@@ -11,8 +11,8 @@ var log = require('./log');
 var options = (function() {
     var args = process.argv.slice(2);
     return {
-        accessToken: args[0],
-        port: args[1] || 3000,
+        accessToken: process.env.GITHUB_TOKEN,
+        port: process.env.VCAP_APP_PORT || 3000,
         codeMargin: 7,
         url: 'http://ghrr.lukasmartinelli.ch:80/events'
     };
