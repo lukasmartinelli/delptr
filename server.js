@@ -14,7 +14,7 @@ var options = (function() {
         accessToken: process.env.GITHUB_TOKEN,
         port: process.env.VCAP_APP_PORT || 3000,
         codeMargin: 7,
-        url: 'http://ghrr.lukasmartinelli.ch:80/events'
+        url: process.env.GHRR_URI || 'http://ghrr.lukasmartinelli.ch:80/events'
     };
 })();
 
