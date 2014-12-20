@@ -17,6 +17,15 @@ var newlineSampleFile = '#include <iostream>\n' +
                  '    return 0;\n' +
                  '}';
 
+var nestedSampleFile = '#include <iostream>\n' +
+                 'using namespace std;\n' +
+                 'int main() {\n' +
+                 '    for(int i = 0; i < 10; i++) {\n' +
+                 '        cout << "Hello World!" << endl;\n' +
+                 '    }\n' +
+                 '    return 0;\n' +
+                 '}';
+
 describe('fragment', function() {
     it('returns line and margin below if line is at start of file', function() {
         var fragment = code.fragment(1, sampleFile);
@@ -40,6 +49,17 @@ describe('fragment', function() {
              'int main()\n' +
              '{\n' +
              '    cout << "Hello World!" << endl;\n' +
+             '    return 0;\n' +
+             '}'
+        );
+    });
+    it('works with nested blocks', function() {
+        var fragment = code.fragment(7, nestedSampleFile);
+        should(fragment).eql(
+             'int main() {\n' +
+             '    for(int i = 0; i < 10; i++) {\n' +
+             '        cout << "Hello World!" << endl;\n' +
+             '    }\n' +
              '    return 0;\n' +
              '}'
         );

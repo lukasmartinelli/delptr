@@ -9,19 +9,29 @@ module.exports = function (codeMargin) {
             to: to > lastLine ? lastLine : to
         };
     };
+
     var findSurroundingBlock = function (linenumber, lines) {
-        var findOpenBracket = function() {
+        //Always search the correct opening bracket users can see
+        //the function name
+        var findOpeningBracket = function() {
+            var stack = [];
             for(var i = linenumber - 1; i > 0; i--) {
+                if(lines[i].indexOf('}') > -1 ) {
+                    stack.push(i);
+                }
                 if(lines[i].indexOf('{') > -1) {
-                    if(lines[i].trim() === '{') {
-                        return i;
+                    if(stack.length === 0) {
+                        return lines[i].trim() === '{' ? i : i + 1;
                     } else {
-                        return i + 1;
+                        stack.pop();
                     }
                 }
             }
             return -1;
         };
+
+        // We don't need to find the real closing bracket just the next one
+        // this tends to look nicer even though it is not correct
         var findClosedBracket = function () {
             for(var i = linenumber - 1; i < lines.length; i++) {
                 if(lines[i].indexOf('}') > -1) {
@@ -30,8 +40,9 @@ module.exports = function (codeMargin) {
             }
             return -1;
         };
+
         return {
-            from: findOpenBracket(),
+            from: findOpeningBracket(),
             to: findClosedBracket()
         };
     };
