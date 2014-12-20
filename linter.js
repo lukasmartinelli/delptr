@@ -1,4 +1,6 @@
 'use strict';
+var parse = require('parse-diff');
+
 var hasUnmanagedMemory = function (lines) {
     return lines.filter(function (line) {
         return line.type === 'add' || line.type === 'normal';
@@ -26,7 +28,9 @@ var checkFile = function (file) {
 };
 
 module.exports = {
-    check: function (files) {
+    check: function (patch) {
+        var parts = patch.split(/(diff --git [\w\W]*)/);
+        var files = parse(parts.slice(1).join(''));
         return files.filter(isCppFile).map(checkFile);
     }
 };

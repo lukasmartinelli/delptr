@@ -15,12 +15,11 @@ module.exports = function (accessToken) {
             };
 
             request(options, function (error, response, body) {
-                var unixTimestamp = response.headers['x-ratelimit-reset'];
-                var resetDate = new Date(unixTimestamp * 1000);
-
                 if (error) {
                     console.error(error);
                 } else if (response.statusCode === 403) {
+                    var unixTimestamp = response.headers['x-ratelimit-reset'];
+                    var resetDate = new Date(unixTimestamp * 1000);
                     rateLimitReached(resetDate);
                 } else if (response.statusCode === 200) {
                     callback(JSON.parse(body));
@@ -33,7 +32,7 @@ module.exports = function (accessToken) {
             var url = 'https://github.com/' + repo.name +
                       '/commit/' + commit.sha + '.patch';
 
-            request({ url: url }, function (error, response, body) {
+            request({ url: url, timeout: 5000 }, function (error, response, body) {
                 if (error) {
                     console.error(error);
                 } else if (response.statusCode === 404) {
@@ -47,7 +46,7 @@ module.exports = function (accessToken) {
             var url = 'https://raw.githubusercontent.com/' + repoName +
                       '/' + commitSha + '/' + filename;
 
-            request({ url: url }, function (error, response, body) {
+            request({ url: url, timeout: 5000 }, function (error, response, body) {
                 if (error) {
                     console.error(error);
                 } else if (response.statusCode === 404) {

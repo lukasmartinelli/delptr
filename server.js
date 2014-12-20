@@ -1,11 +1,11 @@
 /*eslint new-cap:0 */
 'use strict';
+//require('v8-profiler');
 var path = require('path');
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var linter = require('./linter');
-var parse = require('./parse');
 var log = require('./log');
 
 var options = (function() {
@@ -26,18 +26,11 @@ var clientSocket = require('socket.io-client')(options.url);
 var lastError;
 
 var handlePushEvent = function(event) {
-    var getPatches = function (callback) {
+    var checkRepo = function (callback) {
         event.payload.commits.forEach(function (commit) {
             github.patch(event.repo, commit, function (patch) {
-                callback(commit, parse(patch));
+                callback(commit, linter.check(patch));
             });
-        });
-    };
-
-    var checkRepo = function (callback) {
-        getPatches(function (commit, patch) {
-            var lintResults = linter.check(patch.body);
-            callback(commit, lintResults);
         });
     };
 
