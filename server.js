@@ -43,7 +43,6 @@ var handlePushEvent = function(event) {
 
     var handleError = function (commit, filename, error) {
         github.file(event.repo.name, commit.sha, filename, function(file) {
-            console.log(file);
             lastError = {
                 actor: event.actor,
                 repo: event.repo,

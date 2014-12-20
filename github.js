@@ -52,8 +52,10 @@ module.exports = function (accessToken) {
                     console.error(error);
                 } else if (response.statusCode === 404) {
                     console.error('File at ' + url + ' not found');
-                } else {
+                } else if (response.statusCode === 200) {
                     callback(body);
+                } else {
+                    console.error('Unexpected response:' + response.statusCode);
                 }
             });
         }
