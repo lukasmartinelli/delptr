@@ -8,19 +8,15 @@ var http = require('http').Server(app);
 var linter = require('./linter');
 var log = require('./log');
 
-var options = (function() {
-    var args = process.argv.slice(2);
-    return {
-        accessToken: process.env.GITHUB_TOKEN,
-        port: process.env.VCAP_APP_PORT || 3000,
-        codeMargin: 7,
-        url: process.env.GHRR_URI || 'http://ghrr.lukasmartinelli.ch:80/events'
-    };
-})();
+var options = {
+    accessToken: process.env.GITHUB_TOKEN,
+    port: process.env.VCAP_APP_PORT || 3000,
+    codeMargin: 7,
+    url: process.env.GHRR_URI || 'http://ghrr.lukasmartinelli.ch:80/events'
+};
 
 if(!options.accessToken) {
-    console.error('No Github Access token specified.');
-    process.exit(1);
+    throw 'No Github Access token specified.';
 }
 
 var github = require('./github')(options.accessToken);
@@ -34,7 +30,7 @@ var handlePushEvent = function(event) {
     var checkRepo = function (callback) {
         event.payload.commits.forEach(function (commit) {
             github.patch(event.repo, commit, function (patch) {
-                callback(commit, linter.check(patch));
+                callback(commit, linter.checkPatch(patch));
             });
         });
     };
