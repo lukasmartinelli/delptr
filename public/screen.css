@@ -53,7 +53,7 @@ h3 {
     h1 { font-size: 6em; }
     h2 { font-size: 1.4em; }
     h3 { display: block; }
-    code { font-size: 1.4em; }
+    code { font-size: 1.2em; }
 }
 
 @media(max-width: 50em) {
