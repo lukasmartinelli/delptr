@@ -18,6 +18,11 @@ var options = (function() {
     };
 })();
 
+if(!options.accessToken) {
+    console.error('No Github Access token specified.');
+    process.exit(1);
+}
+
 var github = require('./github')(options.accessToken);
 var code = require('./code')(options.codeMargin);
 
