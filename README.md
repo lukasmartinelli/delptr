@@ -23,7 +23,8 @@ Please be aware that this will download alot of data if you don't provide
 a Github access token.
 
 ```
-export GITHUB_ACCESS_TOKEN=asb1234gwa...
+export GITHUB_ACCESS_TOKEN="asb1234gwa..."
+export GHRR_URI="http://ghrr.lukasmartinelli.ch:80/events"
 npm start $GITHUB_ACCESS_TOKEN
 ```
 
