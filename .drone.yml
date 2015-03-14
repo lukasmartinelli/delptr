@@ -1,5 +1,8 @@
 image: node:0.10
+env:
+  - COVERALLS_REPO_TOKEN=$$COVERALLS_REPO_TOKEN
 script:
   - npm install
   - npm install -g gulp
   - gulp
+  - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
