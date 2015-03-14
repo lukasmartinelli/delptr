@@ -2,7 +2,7 @@
 var colors = require('colors/safe');
 
 var log = function(color, message) {
-    if (process.stdout.isTTY) {
+    if (process.stdout.isTTY && process.env.DELPTR_COLOR) {
         console.log(color(message));
     } else {
         console.log(message);

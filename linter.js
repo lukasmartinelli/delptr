@@ -1,4 +1,6 @@
 'use strict';
+var parse = require('parse-diff');
+
 var hasUnmanagedMemory = function (lines) {
     return lines.filter(function (line) {
         return line.type === 'add' || line.type === 'normal';
@@ -6,8 +8,9 @@ var hasUnmanagedMemory = function (lines) {
         return {
             linenumber: line.ln || line.ln2,
             content: line.content,
-            new: line.content.indexOf('new ') > -1,
-            delete: line.content.indexOf('delete ') > -1
+            new: /new .*;/.test(line.content) &&
+                 ! /unique_ptr|shared_ptr/.test(line.content),
+            delete: /delete .*;/.test(line.content)
         };
     }).filter(function (line) {
         return line.new || line.delete;
@@ -25,8 +28,15 @@ var checkFile = function (file) {
     };
 };
 
+var checkCppFiles = function (files) {
+    return files.filter(isCppFile).map(checkFile);
+};
+
 module.exports = {
-    check: function (files) {
-        return files.filter(isCppFile).map(checkFile);
-    }
+    checkPatch: function(patch) {
+        var parts = patch.split(/(diff --git [\w\W]*)/);
+        var files = parse(parts.slice(1).join(''));
+        return checkCppFiles(files);
+    },
+    check: checkCppFiles
 };
