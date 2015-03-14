@@ -79,7 +79,7 @@ var handlePushEvent = function(event) {
     });
 };
 
-app.use(express.static(path.join(__dirname ,'/public')));
+app.use(express.static(path.join(__dirname, '/public')));
 http.listen(options.port);
 clientSocket.on('pushevent', handlePushEvent);
 serverSocket.on('connection', function(browserSocket) {

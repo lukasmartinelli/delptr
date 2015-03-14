@@ -1,5 +1,7 @@
 # delptr [![Build Status](https://travis-ci.org/lukasmartinelli/delptr.svg)](https://travis-ci.org/lukasmartinelli/delptr) ![Dependencies](https://david-dm.org/lukasmartinelli/delptr.svg) [![Code Climate](https://codeclimate.com/github/lukasmartinelli/delptr/badges/gpa.svg)](https://codeclimate.com/github/lukasmartinelli/delptr) [![Coverage Status](https://img.shields.io/coveralls/lukasmartinelli/delptr.svg)](https://coveralls.io/r/lukasmartinelli/delptr?branch=master)
 
+[![Build Status](http://drone.dreicloud.ch/api/badge/github.com/lukasmartinelli/delptr/status.svg?branch=master&style=flat)](http://drone.dreicloud.ch/github.com/lukasmartinelli/delptr)
+
 Listen to all push events of C++ projects on Github and run some simple linting, to check
 whether the people still manage memory on their own instead of using smart pointers.
 

@@ -9,7 +9,7 @@ var hasUnmanagedMemory = function (lines) {
             linenumber: line.ln || line.ln2,
             content: line.content,
             new: /new .*;/.test(line.content) &&
-                 ! /unique_ptr|shared_ptr/.test(line.content),
+                 !/unique_ptr|shared_ptr/.test(line.content),
             delete: /delete .*;/.test(line.content)
         };
     }).filter(function (line) {
