@@ -1,6 +1,5 @@
 /*eslint new-cap:0 */
 'use strict';
-//require('v8-profiler');
 var path = require('path');
 var express = require('express');
 var app = express();
@@ -12,7 +11,7 @@ var options = {
     accessToken: process.env.GITHUB_TOKEN,
     port: process.env.VCAP_APP_PORT || 3000,
     codeMargin: 7,
-    url: process.env.GHRR_URI || 'http://ghrr.lukasmartinelli.ch:80/events'
+    url: process.env.GHRR_URI || 'http://ghrr.gq:80/events'
 };
 
 if(!options.accessToken) {
@@ -26,8 +25,8 @@ var serverSocket = require('socket.io')(http);
 var clientSocket = require('socket.io-client')(options.url);
 var lastError;
 
-var handlePushEvent = function(event) {
-    var checkRepo = function (callback) {
+function handlePushEvent(event) {
+    function checkRepo(callback) {
         event.payload.commits.forEach(function (commit) {
             github.patch(event.repo, commit, function (patch) {
                 callback(commit, linter.checkPatch(patch));
@@ -35,7 +34,7 @@ var handlePushEvent = function(event) {
         });
     };
 
-    var handleError = function (commit, filename, error) {
+    function handleError(commit, filename, error) {
         github.file(event.repo.name, commit.sha, filename, function(file) {
             lastError = {
                 actor: event.actor,
@@ -49,12 +48,12 @@ var handlePushEvent = function(event) {
         });
     };
 
-    var handleCheck = function(commit, lintResults) {
+    function handleCheck(commit, lintResults) {
         if (lintResults.length === 0) {
             log.skip(event.repo.name, commit.sha);
         }
 
-        lintResults.forEach(function (lintResult) {
+        lintResults.forEach(function processLintResults(lintResult) {
             if (lintResult.errors.length > 0) {
                 lintResult.errors.forEach(function(error) {
                     handleError(commit, lintResult.filename, error);
@@ -68,7 +67,7 @@ var handlePushEvent = function(event) {
 
     };
 
-    github.languages(event.repo, function(languages) {
+    github.languages(event.repo, function handleLanguage(languages) {
         if('C++' in languages) {
             checkRepo(handleCheck);
         } else {

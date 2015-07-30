@@ -25,9 +25,9 @@ Please be aware that this will download alot of data if you don't provide
 a Github access token.
 
 ```
-export GITHUB_ACCESS_TOKEN="asb1234gwa..."
-export GHRR_URI="http://ghrr.lukasmartinelli.ch:80/events"
-npm start $GITHUB_ACCESS_TOKEN
+export GITHUB_TOKEN="asb1234gwa..."
+export GHRR_URI="http://ghrr.gq:80/events"
+npm start
 ```
 
 Now you can visit `localhost:3000` to see the realtime linting in action.

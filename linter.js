@@ -1,7 +1,7 @@
 'use strict';
 var parse = require('parse-diff');
 
-var hasUnmanagedMemory = function (lines) {
+function hasUnmanagedMemory(lines) {
     return lines.filter(function (line) {
         return line.type === 'add' || line.type === 'normal';
     }).map(function (line) {
@@ -17,23 +17,23 @@ var hasUnmanagedMemory = function (lines) {
     });
 };
 
-var isCppFile = function (file) {
+function isCppFile(file) {
     return (/^[\w\W]*\.(cpp|hpp|h)$/i).test(file.to);
 };
 
-var checkFile = function (file) {
+function checkFile(file) {
     return {
         filename: file.to || file.from,
         errors: hasUnmanagedMemory(file.lines)
     };
 };
 
-var checkCppFiles = function (files) {
+function checkCppFiles(files) {
     return files.filter(isCppFile).map(checkFile);
 };
 
 module.exports = {
-    checkPatch: function(patch) {
+    checkPatch: function checkPatch(patch) {
         var parts = patch.split(/(diff --git [\w\W]*)/);
         var files = parse(parts.slice(1).join(''));
         return checkCppFiles(files);
