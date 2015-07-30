@@ -1,7 +1,7 @@
 'use strict';
 var colors = require('colors/safe');
 
-var log = function(color, message) {
+function log(color, message) {
     if (process.stdout.isTTY && process.env.DELPTR_COLOR) {
         console.log(color(message));
     } else {
@@ -9,7 +9,7 @@ var log = function(color, message) {
     }
 };
 
-var errorType = function (error) {
+function errorType(error) {
     if (error.new) {
         return 'NEW';
     }
@@ -20,7 +20,7 @@ var errorType = function (error) {
 };
 
 module.exports = {
-    success: function(repoName, commitSha, filename) {
+    success: function success(repoName, commitSha, filename) {
         log(colors.green, [
             'OK',
             repoName,
@@ -28,7 +28,7 @@ module.exports = {
             filename
         ].join('\t'));
     },
-    lintError: function(repoName, commitSha, filename, error) {
+    lintError: function lintError(repoName, commitSha, filename, error) {
         log(colors.red, [
             errorType(error),
             repoName,
@@ -36,14 +36,14 @@ module.exports = {
             filename + ':' + error.linenumber
         ].join('\t'));
     },
-    skip: function(repoName, commitSha) {
+    skip: function skip(repoName, commitSha) {
         console.log([
             'SKIP',
             repoName,
             commitSha.slice(0, 7)
         ].join('\t'));
     },
-    ignore: function(repoName) {
+    ignore: function ignore(repoName) {
         console.log(['IGNORE', repoName].join('\t'));
     }
 };

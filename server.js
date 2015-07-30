@@ -18,12 +18,18 @@ if(!options.accessToken) {
     throw 'No Github Access token specified.';
 }
 
+console.log(options);
+
 var github = require('./github')(options.accessToken);
 var code = require('./code')(options.codeMargin);
 
 var serverSocket = require('socket.io')(http);
 var clientSocket = require('socket.io-client')(options.url);
 var lastError;
+
+clientSocket.on('connect_error', function(err) {
+    console.error(err);
+});
 
 function handlePushEvent(event) {
     function checkRepo(callback) {

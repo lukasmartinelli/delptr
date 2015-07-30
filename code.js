@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function (codeMargin) {
-    var maxFragmentRange = function (linenumber, lastLine) {
+    function maxFragmentRange(linenumber, lastLine) {
         var from = linenumber - codeMargin;
         var to = linenumber + codeMargin;
 
@@ -10,10 +10,10 @@ module.exports = function (codeMargin) {
         };
     };
 
-    var findSurroundingBlock = function (linenumber, lines) {
+    function findSurroundingBlock(linenumber, lines) {
         //Always search the correct opening bracket users can see
         //the function name
-        var findOpeningBracket = function() {
+        function findOpeningBracket() {
             var stack = [];
             for(var i = linenumber - 1; i > 0; i--) {
                 if(lines[i].indexOf('}') > -1 ) {
@@ -32,7 +32,7 @@ module.exports = function (codeMargin) {
 
         // We don't need to find the real closing bracket just the next one
         // this tends to look nicer even though it is not correct
-        var findClosedBracket = function () {
+        function findClosedBracket() {
             for(var i = linenumber - 1; i < lines.length; i++) {
                 if(lines[i].indexOf('}') > -1) {
                     return i + 1;
@@ -47,7 +47,7 @@ module.exports = function (codeMargin) {
         };
     };
     return {
-        fragment: function (lineNumber, file) {
+        fragment: function fragment(lineNumber, file) {
             var lines = file.split('\n');
             var block = findSurroundingBlock(lineNumber, lines);
 
