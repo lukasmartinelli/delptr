@@ -41,6 +41,7 @@
             </div>
         </section>
         <script src="//cdn.jsdelivr.net/socket.io-client/1.2.0/socket.io.min.js"></script>
+        <script src="//cdn.jsdelivr.net/jquery/2.1.1/jquery.min.js"></script>
         <script src="//cdn.jsdelivr.net/highlight.js/8.4.0/highlight.min.js"></script>
         <script src="//cdn.jsdelivr.net/knockout/3.2.0/knockout.js"></script>
         <script>
@@ -66,7 +67,7 @@
                 }
                 var url = location.origin;
 
-                io(url).on('linterror', function(msg) {
+                var socket = io(url).on('linterror', function(msg) {
                     model.username(msg.actor.login);
                     model.userUrl('https://github.com/' + msg.actor.login);
                     model.commitUrl('https://github.com/' + msg.repo.name +
@@ -79,6 +80,11 @@
                     model.code(msg.code);
                     hljs.highlightBlock(document.getElementById('code-fragment'));
                 });
+
+              $(window).on('beforeunload', function(){
+                  socket.close();
+              });
+
             })();
         </script>
     </body>
