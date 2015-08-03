@@ -60,7 +60,13 @@
 
                 ko.applyBindings(model);
 
-                io().on('linterror', function(msg) {
+                // Somehow only works with static url hack
+                if (typeof location.origin === 'undefined') {
+                      location.origin = location.protocol + '//' + location.host;
+                }
+                var url = location.origin;
+
+                io(url).on('linterror', function(msg) {
                     model.username(msg.actor.login);
                     model.userUrl('https://github.com/' + msg.actor.login);
                     model.commitUrl('https://github.com/' + msg.repo.name +
