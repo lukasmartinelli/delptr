@@ -24,6 +24,7 @@ var github = require('./github')(options.accessToken);
 var code = require('./code')(options.codeMargin);
 
 var serverSocket = require('socket.io')(http);
+serverSocket.set('origins', '*:*');
 var clientSocket = require('socket.io-client')(options.url);
 var lastError;
 
