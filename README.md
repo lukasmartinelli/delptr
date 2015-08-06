@@ -45,3 +45,10 @@ Now you can execute the tests and lint the project.
 ```
 gulp
 ```
+
+## Todos
+
+- [ ] Store logs in a database (2h)
+- [ ] Replay 5 latest leaks (1h)
+- [ ] Fix memory leaks in Node application itself (4h)
+- [ ] Rigorous testing (1h)
