@@ -39,6 +39,9 @@
                     </pre>
                 </div>
             </div>
+            <div class="status">
+              <p data-bind="text: status"></p>
+            </div>
         </section>
         <script src="//cdn.jsdelivr.net/socket.io-client/1.2.0/socket.io.min.js"></script>
         <script src="//cdn.jsdelivr.net/jquery/2.1.1/jquery.min.js"></script>
@@ -49,6 +52,7 @@
                 hljs.initHighlightingOnLoad();
 
                 var model = {
+                    status: ko.observable(),
                     username: ko.observable(),
                     userUrl: ko.observable(),
                     avatarUrl: ko.observable(),
@@ -66,8 +70,9 @@
                       location.origin = location.protocol + '//' + location.host;
                 }
                 var url = location.origin;
+                var socket = io(url).connect();
 
-                var socket = io(url).on('linterror', function(msg) {
+                socket.on('linterror', function(msg) {
                     model.username(msg.actor.login);
                     model.userUrl('https://github.com/' + msg.actor.login);
                     model.commitUrl('https://github.com/' + msg.repo.name +
@@ -79,6 +84,10 @@
 
                     model.code(msg.code);
                     hljs.highlightBlock(document.getElementById('code-fragment'));
+                });
+
+                socket.on('lintsuccess', function(msg) {
+                  model.status(msg.actor.login + ' pushed commit ' + msg.commit.sha.slice(0,10) + ' to ' + msg.repo.name + ' and passed the check.');
                 });
 
               $(window).on('beforeunload', function(){

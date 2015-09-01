@@ -61,6 +61,18 @@ h3 {
     h3 { display: none; }
 }
 
+/*===STATUS===*/
+.status {
+    padding: 0;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.24);
+    border-radius: 2px;
+    background-color: #ffefc1;
+    max-width: 100%;
+    font-family: 'Droid Sans Mono', monospace;
+    font-size: 1.2em;
+    color: #5D3A00;
+}
+
 /*===BLAME===*/
 .blame {
     padding: 0;

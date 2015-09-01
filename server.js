@@ -26,6 +26,7 @@ var code = require('./code')(options.codeMargin);
 
 var ioClient = require('socket.io-client')(options.url);
 var lastError;
+var lastSuccess;
 
 server.listen(options.port);
 app.use(express.static(path.join(__dirname, '/public')));
@@ -33,6 +34,9 @@ app.use(express.static(path.join(__dirname, '/public')));
 io.on('connection', function(socket) {
     if(lastError) {
         socket.emit('linterror', lastError);
+    }
+    if(lastSuccess) {
+        socket.emit('lintsuccess', lastSuccess);
     }
 });
 
@@ -72,6 +76,12 @@ function handlePushEvent(event) {
                                      lintResult.filename, error);
                 });
             } else {
+                lastSuccess = {
+                    actor: event.actor,
+                    repo: event.repo,
+                    commit: commit,
+                };
+                io.sockets.emit('lintsuccess', lastSuccess);
                 log.success(event.repo.name, commit.sha, lintResult.filename);
             }
         });
