@@ -1,12 +1,11 @@
-# delptr [![Build Status](https://travis-ci.org/lukasmartinelli/delptr.svg)](https://travis-ci.org/lukasmartinelli/delptr) ![Dependencies](https://david-dm.org/lukasmartinelli/delptr.svg) [![Code Climate](https://codeclimate.com/github/lukasmartinelli/delptr/badges/gpa.svg)](https://codeclimate.com/github/lukasmartinelli/delptr) [![Coverage Status](https://img.shields.io/coveralls/lukasmartinelli/delptr.svg)](https://coveralls.io/r/lukasmartinelli/delptr?branch=master) [![Dependency Status](https://gemnasium.com/lukasmartinelli/delptr.svg)](https://gemnasium.com/lukasmartinelli/delptr)
+# delptr [![Build Status](https://travis-ci.org/lukasmartinelli/delptr.svg)](https://travis-ci.org/lukasmartinelli/delptr) [![Code Climate](https://codeclimate.com/github/lukasmartinelli/delptr/badges/gpa.svg)](https://codeclimate.com/github/lukasmartinelli/delptr) [![Coverage Status](https://img.shields.io/coveralls/lukasmartinelli/delptr.svg)](https://coveralls.io/r/lukasmartinelli/delptr?branch=master) [![Dependency Status](https://gemnasium.com/lukasmartinelli/delptr.svg)](https://gemnasium.com/lukasmartinelli/delptr)
 
-[![Build Status](http://drone.dreicloud.ch/api/badge/github.com/lukasmartinelli/delptr/status.svg?branch=master&style=flat)](http://drone.dreicloud.ch/github.com/lukasmartinelli/delptr)
-
-Listen to all push events of C++ projects on Github and run some simple linting, to check
+Listen to all push events of C++ projects on Github through the [GitHub Realtime Relay](https://github.com/lukasmartinelli/ghrr) and run some simple linting, to check
 whether the people still manage memory on their own instead of using smart pointers.
-
 If someone still uses `new` and `delete` in their code they appear in realtime on the
 site.
+
+A demo of this project runs at [http://dontleakmemory.ml](http://dontleakmemory.ml).
 
 ![Realtime linting of C++ projects](screenshot.gif)
 
@@ -45,10 +44,3 @@ Now you can execute the tests and lint the project.
 ```
 gulp
 ```
-
-## Todos
-
-- [ ] Store logs in a database (2h)
-- [ ] Replay 5 latest leaks (1h)
-- [ ] Fix memory leaks in Node application itself (4h)
-- [ ] Rigorous testing (1h)
