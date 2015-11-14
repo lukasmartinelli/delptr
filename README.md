@@ -25,7 +25,6 @@ a Github access token.
 
 ```
 export GITHUB_TOKEN="asb1234gwa..."
-export GHRR_URI="http://ghrr.gq:80/events"
 npm start
 ```
 
