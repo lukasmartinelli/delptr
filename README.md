@@ -5,7 +5,9 @@ Listen to all push events of C++ projects on Github through the [GitHub Realtime
 If someone still uses `new` and `delete` in their code they appear in realtime on the
 site.
 
-[**:globe_with_meridians: Check the demo at delptr.lukasmartinelli.ch**](http://delptr.lukasmartinelli.ch)
+This is a demo project to demonstrate the capabilities of the [GitHub Realtime Relay](https://github.com/lukasmartinelli/ghrr).
+
+[**:globe_with_meridians: Check the demo at delptr.lukasmartinelli.ch**](http://delptr.lukasmartinelli.ch) *(not always online due to the intensive workload)*
 
 ![Realtime linting of C++ projects](screenshot.gif)
 
