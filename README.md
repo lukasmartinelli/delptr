@@ -1,4 +1,6 @@
-# delptr [![Build Status](https://travis-ci.org/lukasmartinelli/delptr.svg)](https://travis-ci.org/lukasmartinelli/delptr) [![Code Climate](https://codeclimate.com/github/lukasmartinelli/delptr/badges/gpa.svg)](https://codeclimate.com/github/lukasmartinelli/delptr) [![Coverage Status](https://img.shields.io/coveralls/lukasmartinelli/delptr.svg)](https://coveralls.io/r/lukasmartinelli/delptr?branch=master) [![Dependency Status](https://gemnasium.com/lukasmartinelli/delptr.svg)](https://gemnasium.com/lukasmartinelli/delptr)
+# delptr ![stability-deprecated](https://img.shields.io/badge/stability-deprecated-red.svg) [![Build Status](https://travis-ci.org/lukasmartinelli/delptr.svg)](https://travis-ci.org/lukasmartinelli/delptr) [![Code Climate](https://codeclimate.com/github/lukasmartinelli/delptr/badges/gpa.svg)](https://codeclimate.com/github/lukasmartinelli/delptr) [![Coverage Status](https://img.shields.io/coveralls/lukasmartinelli/delptr.svg)](https://coveralls.io/r/lukasmartinelli/delptr?branch=master) [![Dependency Status](https://gemnasium.com/lukasmartinelli/delptr.svg)](https://gemnasium.com/lukasmartinelli/delptr)
+
+> :warning: This repository is no longer maintained by Lukas Martinelli.
 
 Listen to all push events of C++ projects on Github through the [GitHub Realtime Relay](https://github.com/lukasmartinelli/ghrr) and run some simple linting, to check
 **whether the people still manage memory on their own instead of using smart pointers**.
